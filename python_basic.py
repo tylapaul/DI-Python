@@ -20,3 +20,5 @@ if amzius <= 10:
 elif amzius >=50:
      print("gerk vodke")
 else: print("dirbk")
+#noriu nukomitinti faila kita
+
