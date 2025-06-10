@@ -1,0 +1,34 @@
+import requests
+import json
+
+model = "jobautomation/OpenEuroLLM-Lithuanian:latest"
+
+with open('./anyksciai.txt', 'r', encoding='utf-8') as file:
+    context = file.read()
+print(context)
+
+user_prompt = input("Prašome užduoti klausimą apie Anykščius: ")
+
+response = requests.post(
+    "http://localhost:11434/api/chat",
+    json={
+        "model": model,
+        "messages": [
+            {"role": "system", "content": "Modelis turi atsakinėti kaip Anykščių turizmo informacijos centro specialistas, t. y. siūlyti maršrutus, renginius, lankytinas vietas, praktinę informaciją turistams"},
+            {"role": "system", "content": "Atsakymai turi būti trumpi (1–3 sakiniai) ir orientuoti į aiškų faktą arba rekomendaciją. Jei klausimas reikalauja išsamesnio paaiškinimo – pateikti santrauką su nuoroda į papildomą šaltinį (jei prieinamas)"},
+            {"role": "system", "content": "Atsakymai turi būti mandagūs, pozityvūs ir paslaugūs, tarsi bendraujant su gyvu žmogumi, kuris domisi Anykščių regionu"},
+            {"role": "system", "content": "Privalai atsakyti tik lietuvių kalba, naudodamas aiškią ir taisyklingą kalbą, suprantamą plačiajai auditorijai."},
+            {"role": "user", "content": f"context: \"{context}\". question: \"{user_prompt}\""}
+        ],
+        "stream": False
+    }
+)
+
+#response = response.json()
+#print(response)
+
+duomenys = json.loads(response)
+isgautas_tekstas = duomenys['candidates'][0]['content']['parts'][0]['text']
+print(isgautas_tekstas)
+# print(response.json())
+# print(response.json()['symbol'])Kokia u
